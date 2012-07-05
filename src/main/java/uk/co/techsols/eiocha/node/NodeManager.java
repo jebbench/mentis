@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import uk.co.techsols.eiocha.Manager;
 import uk.co.techsols.eiocha.UnknownTypeException;
 import uk.co.techsols.eiocha.entities.Job;
 import uk.co.techsols.eiocha.entities.Node;
 import uk.co.techsols.eiocha.entities.Node.Type;
-import uk.co.techsols.eiocha.job.JobManager;
 
 /**
  *
@@ -26,11 +26,11 @@ public abstract class NodeManager implements Runnable {
     private PriorityBlockingQueue<Node> availableNodes = new PriorityBlockingQueue<Node>();
     private long count = 0;
     private boolean run = true;
-    private JobManager jobManager;
+    private Manager manager;
     private final JobStateMap jobStateMap;
 
-    public NodeManager(JobManager jobManager, JobStateMap jobStateMap) {
-        this.jobManager = jobManager;
+    public NodeManager(Manager manager, JobStateMap jobStateMap) {
+        this.manager = manager;
         this.jobStateMap = jobStateMap;
         
         new Thread(this).start();
@@ -56,10 +56,10 @@ public abstract class NodeManager implements Runnable {
 
     public void queueNode(Node node) {
         assert (node.hasFreeCapacity());
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(MessageFormat.format("Added {0} node with capacity of {1}. Total nodes with capacity now {2}.", node.getType(), node.getCurrentCapacity(), availableNodes.size()));
-        }
         availableNodes.add(node);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(MessageFormat.format("Added {0} node with capacity of {1}. Total nodes with capacity now {2}.", node.getType(), node.getUsedCapacity(), availableNodes.size()));
+        }
     }
 
     public void completeJob(Job job) {
@@ -80,7 +80,7 @@ public abstract class NodeManager implements Runnable {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug(MessageFormat.format("Waiting for a job for {0} node {1}.", node.getType(), node.getId()));
                     }
-                    job = jobManager.getNextJob(getType());
+                    job = manager.getJobManager().getNextJob(getType());
 
                     if (LOG.isDebugEnabled()) {
                         LOG.debug(MessageFormat.format("Processing job {0} on {1} node {2}.", job.getId(), node.getType(), node.getId()));
@@ -93,7 +93,7 @@ public abstract class NodeManager implements Runnable {
                         queueNode(node);
                     }
                     if (job != null) {
-                        jobManager.queueJob(getType(), job);
+                        manager.getJobManager().queueJob(getType(), job);
                     }
                 }
             } catch (UnknownTypeException e) {

@@ -4,10 +4,12 @@
  */
 package uk.co.techsols.eiocha.rest;
 
+import java.io.InputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import uk.co.techsols.eiocha.job.JobManager;
@@ -30,7 +32,7 @@ public class JobController {
     
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<String> addJob(){
-        Job job = jobManager.createJob();
+        Job job = jobManager.createJob("xml".getBytes(), "xsl".getBytes());
         return new ResponseEntity<String>(job.getId().toString(), HttpStatus.CREATED);
     }
     

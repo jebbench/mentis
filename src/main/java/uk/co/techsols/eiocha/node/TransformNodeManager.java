@@ -5,23 +5,19 @@
 package uk.co.techsols.eiocha.node;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import uk.co.techsols.eiocha.Manager;
 import uk.co.techsols.eiocha.entities.Job;
 import uk.co.techsols.eiocha.entities.Node;
-import uk.co.techsols.eiocha.job.JobManager;
 
 /**
  *
  * @author James Bench
  */
-@Component
-@Scope(value = "singleton")
 public class TransformNodeManager extends NodeManager {
 
     @Autowired
-    public TransformNodeManager(JobManager jobManager) {
-        super(jobManager, new JobStateMap(Job.State.TQUEUE, Job.State.TING, Job.State.TERROR));
+    public TransformNodeManager(Manager manager) {
+        super(manager, new JobStateMap(Job.State.TQUEUE, Job.State.TING, Job.State.TERROR));
     }
 
     @Override

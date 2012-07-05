@@ -21,7 +21,7 @@ public class Node {
     private final long id;
     private final Type type;
     private final int totalCapacity;
-    private int currentCapacity;
+    private int usedCapacity;
     private HashMap<Long, Job> jobs = new HashMap<Long, Job>();
     private NodeManager nodeManager;
 
@@ -30,6 +30,7 @@ public class Node {
         this.id = id;
         this.type = nodeManager.getType();
         this.totalCapacity = totalCapacity;
+        this.usedCapacity = 0;
     }
 
     public void setNodeManager(NodeManager nodeManager) {
@@ -37,15 +38,15 @@ public class Node {
     }
 
     public boolean hasFreeCapacity() {
-        return (currentCapacity < totalCapacity);
+        return (usedCapacity < totalCapacity);
     }
 
     public float getUtilisation() {
-        return (currentCapacity / totalCapacity) * 100;
+        return (usedCapacity / totalCapacity) * 100;
     }
 
-    public int getCurrentCapacity() {
-        return currentCapacity;
+    public int getUsedCapacity() {
+        return usedCapacity;
     }
 
     public int getTotalCapacity() {
@@ -62,7 +63,7 @@ public class Node {
 
     public void complete(Job job) {
         jobs.remove(job.getId());
-        currentCapacity++;
+        usedCapacity--;
         if (hasFreeCapacity()) {
             nodeManager.queueNode(this);
         }
@@ -70,7 +71,7 @@ public class Node {
 
     public void process(Job job) {
         jobs.put(job.getId(), job);
-        currentCapacity--;
+        usedCapacity++;
         if (hasFreeCapacity()) {
             nodeManager.queueNode(this);
         }
