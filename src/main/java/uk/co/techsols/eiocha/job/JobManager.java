@@ -27,6 +27,7 @@ public class JobManager {
     private final static Log LOG = LogFactory.getLog(JobManager.class);
     private HashMap<Long, Job> jobs = new HashMap<Long, Job>();
     private PriorityBlockingQueue<Job> transformQueue = new PriorityBlockingQueue<Job>();
+    private PriorityBlockingQueue<Job> renderQueue = new PriorityBlockingQueue<Job>();
     private long count = 0;
 
     public JobManager() {
@@ -41,6 +42,35 @@ public class JobManager {
         }
         addJobToTransformQueue(job);
         return job;
+    }
+    
+    public void completeTransform(Job job){
+        // TODO: check job has XSL-FO
+        job.getNode().complete(job);
+        addJobToRenderQueue(job);
+    }
+    
+    public void completeRender(Job job){
+        //TODO: check job has PDF
+        job.getNode().complete(job);
+        job.setState(Job.State.DONE);
+    }
+    
+    public void errorTransform(Job job, String error){
+        errorJob(Node.Type.TRANSFORM, job, error);
+    }
+    
+    public void errorRender(Job job, String error){
+        errorJob(Node.Type.RENDER, job, error);
+    }
+    
+    public void addJobToRenderQueue(Job job) {
+        // TODO: Check the job has XSL-FO
+        job.setState(Job.State.RQUEUE);
+        renderQueue.add(job);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(MessageFormat.format("Added job {0} to the RENDER queue.", job.getId()));
+        }
     }
 
     public void addJobToTransformQueue(Job job) {
@@ -57,10 +87,37 @@ public class JobManager {
             case TRANSFORM:
                 addJobToTransformQueue(job);
             case RENDER:
-                throw new NotImplementedException();
+                addJobToRenderQueue(job);
             default:
                 throw new UnknownTypeException(MessageFormat.format("Unknown type ''{0}''.", type));
         }
+    }
+    
+    public void completeJob(Node.Type type, Job job) throws UnknownTypeException {
+        switch (type) {
+            case TRANSFORM:
+                completeTransform(job);
+            case RENDER:
+                completeRender(job);
+            default:
+                throw new UnknownTypeException(MessageFormat.format("Unknown type ''{0}''.", type));
+        }
+    }
+    
+    public void errorJob(Node.Type type, Job job, String error) {
+        switch (type) {
+            case TRANSFORM:
+                job.setState(Job.State.TERROR);
+            case RENDER:
+                job.setState(Job.State.RERROR);
+            default:
+                job.setState(Job.State.ERROR);
+        }
+        job.setError(error);
+    }
+    
+    public void errorJob(Job job, String error) {
+        errorJob(null, job, error);
     }
 
     public Job getNextJob(Node.Type type) throws InterruptedException, UnknownTypeException {
@@ -69,7 +126,7 @@ public class JobManager {
                 case TRANSFORM:
                     return transformQueue.take();
                 case RENDER:
-                    throw new NotImplementedException();
+                    return renderQueue.take();
                 default:
                     throw new UnknownTypeException(MessageFormat.format("Unknown type ''{0}''.", type));
             }

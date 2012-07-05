@@ -6,6 +6,7 @@ package uk.co.techsols.eiocha.entities;
 
 import java.util.HashMap;
 import uk.co.techsols.eiocha.node.NodeManager;
+import uk.co.techsols.eiocha.workers.Transformer;
 
 /**
  *
@@ -74,7 +75,8 @@ public class Node {
             nodeManager.queueNode(this);
         }
 
-        // Do the work
+        Transformer transformer = new Transformer();
+        transformer.process(job);
 
     }
 }

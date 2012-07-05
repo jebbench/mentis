@@ -14,6 +14,7 @@ public class Job {
     
     private Long id;
     private State state = State.NEW;
+    private String error = null;
     private Node node;
 
     public Long getId() {
@@ -38,6 +39,14 @@ public class Job {
 
     public void setNode(Node node) {
         this.node = node;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
     
     
