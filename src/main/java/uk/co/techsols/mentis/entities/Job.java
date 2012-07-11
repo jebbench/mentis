@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.co.techsols.eiocha.entities;
+package uk.co.techsols.mentis.entities;
 
 import java.io.File;
 import java.text.MessageFormat;

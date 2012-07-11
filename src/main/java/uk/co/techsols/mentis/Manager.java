@@ -2,15 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.co.techsols.eiocha;
+package uk.co.techsols.mentis;
 
 import java.text.MessageFormat;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.co.techsols.eiocha.entities.Node;
-import uk.co.techsols.eiocha.job.JobManager;
-import uk.co.techsols.eiocha.node.NodeManager;
-import uk.co.techsols.eiocha.node.RenderNodeManager;
-import uk.co.techsols.eiocha.node.TransformNodeManager;
+import uk.co.techsols.mentis.entities.Node;
+import uk.co.techsols.mentis.job.JobManager;
+import uk.co.techsols.mentis.node.NodeManager;
+import uk.co.techsols.mentis.node.RenderNodeManager;
+import uk.co.techsols.mentis.node.TransformNodeManager;
 
 /**
  *

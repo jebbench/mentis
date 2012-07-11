@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.co.techsols.eiocha.workers;
+package uk.co.techsols.mentis.workers;
 
-import uk.co.techsols.eiocha.Manager;
-import uk.co.techsols.eiocha.entities.Job;
+import uk.co.techsols.mentis.Manager;
+import uk.co.techsols.mentis.entities.Job;
 
 /**
  *

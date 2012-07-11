@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.co.techsols.eiocha.rest;
+package uk.co.techsols.mentis.rest;
 
 import java.text.MessageFormat;
 import javax.xml.parsers.DocumentBuilder;
@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import uk.co.techsols.eiocha.job.JobManager;
-import uk.co.techsols.eiocha.entities.Job;
+import uk.co.techsols.mentis.job.JobManager;
+import uk.co.techsols.mentis.entities.Job;
 
 /**
  *

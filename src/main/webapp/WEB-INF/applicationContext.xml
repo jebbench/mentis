@@ -11,10 +11,10 @@
     
     <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
     
-    <bean class="uk.co.techsols.eiocha.Manager" />
-    <bean class="uk.co.techsols.eiocha.job.JobManager" >
-        <property name="jobDataDirectory" value="/eiocha/job-data"/>
+    <bean class="uk.co.techsols.mentis.Manager" />
+    <bean class="uk.co.techsols.mentis.job.JobManager" >
+        <property name="jobDataDirectory" value="/mentis/job-data"/>
     </bean>
-    <bean class="uk.co.techsols.eiocha.node.TransformNodeManager" />
-    <bean class="uk.co.techsols.eiocha.node.RenderNodeManager" />
+    <bean class="uk.co.techsols.mentis.node.TransformNodeManager" />
+    <bean class="uk.co.techsols.mentis.node.RenderNodeManager" />
 </beans>

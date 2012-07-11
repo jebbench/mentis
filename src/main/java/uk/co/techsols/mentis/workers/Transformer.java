@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.co.techsols.eiocha.workers;
+package uk.co.techsols.mentis.workers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -15,7 +15,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import uk.co.techsols.eiocha.Manager;
+import uk.co.techsols.mentis.Manager;
 
 /**
  *

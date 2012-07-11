@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.co.techsols.eiocha.rest;
+package uk.co.techsols.mentis.rest;
 
 /**
  *

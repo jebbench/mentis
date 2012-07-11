@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.co.techsols.eiocha.entities;
+package uk.co.techsols.mentis.entities;
 
 import java.util.HashMap;
-import uk.co.techsols.eiocha.Manager;
-import uk.co.techsols.eiocha.UnknownTypeException;
-import uk.co.techsols.eiocha.node.NodeManager;
-import uk.co.techsols.eiocha.workers.Transformer;
+import uk.co.techsols.mentis.Manager;
+import uk.co.techsols.mentis.UnknownTypeException;
+import uk.co.techsols.mentis.node.NodeManager;
+import uk.co.techsols.mentis.workers.Transformer;
 
 /**
  *

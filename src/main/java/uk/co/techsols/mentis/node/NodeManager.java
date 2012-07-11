@@ -2,18 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.co.techsols.eiocha.node;
+package uk.co.techsols.mentis.node;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import uk.co.techsols.eiocha.Manager;
-import uk.co.techsols.eiocha.UnknownTypeException;
-import uk.co.techsols.eiocha.entities.Job;
-import uk.co.techsols.eiocha.entities.Node;
-import uk.co.techsols.eiocha.entities.Node.Type;
+import uk.co.techsols.mentis.Manager;
+import uk.co.techsols.mentis.UnknownTypeException;
+import uk.co.techsols.mentis.entities.Job;
+import uk.co.techsols.mentis.entities.Node;
+import uk.co.techsols.mentis.entities.Node.Type;
 
 /**
  *
