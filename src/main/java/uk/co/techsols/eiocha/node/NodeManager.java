@@ -37,7 +37,7 @@ public abstract class NodeManager implements Runnable {
     }
 
     public Node createNode(int capacity) {
-        Node node = new Node(this, ++count, capacity);
+        Node node = new Node(manager, ++count, capacity);
         nodes.put(node.getId(), node);
         availableNodes.add(node);
 
@@ -58,11 +58,12 @@ public abstract class NodeManager implements Runnable {
         assert (node.hasFreeCapacity());
         availableNodes.add(node);
         if (LOG.isDebugEnabled()) {
-            LOG.debug(MessageFormat.format("Added {0} node with capacity of {1}. Total nodes with capacity now {2}.", node.getType(), node.getUsedCapacity(), availableNodes.size()));
+            LOG.debug(MessageFormat.format("Added {0} node with usage of {1}. Total nodes with capacity now {2}.", node.getType(), node.getUtilisation(), availableNodes.size()));
         }
     }
 
     public void completeJob(Job job) {
+        job.getNode().complete(job);
     }
 
     @Override

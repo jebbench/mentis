@@ -48,16 +48,21 @@ public class JobManager {
         }
     }
 
-    private File getJobFile(Job job, String type){
+    private File getJobFile(Job job, String type) {
         return new File(job.getDataDirectory(), type);
     }
-    
+
     public void saveFile(Job job, byte[] content, String type) throws IOException {
         File file = getJobFile(job, type);
-        IOUtils.write(content, new FileOutputStream(file));
+        try {
+            IOUtils.write(content, new FileOutputStream(file));
+        } catch (IOException e) {
+            LOG.error(MessageFormat.format("Encountered and errow while trying to save file ''{0}''.", file.getAbsolutePath()), e);
+            throw e;
+        }
     }
 
-    public Job createJob(byte[] xsl, byte[] xml) {
+    public Job createJob(byte[] xml, byte[] xsl) {
         Job job = new Job();
         job.setId(++count);
         try {
@@ -77,24 +82,24 @@ public class JobManager {
         return job;
     }
 
-    public void completeTransform(Job job) {
-        if(!getJobFile(job, "xslfo").exists()){
-            String message = MessageFormat.format("Tried to complete the transform of job {0} without XSL-FO.", job.getId());
-            errorJob(job, message);
-            throw new RuntimeException(message);
+    public void completeTransform(Job job, byte[] xslfo) {
+        try {
+            saveFile(job, xslfo, "xslfo");
+            job.getNode().complete(job);
+            addJobToRenderQueue(job);
+        } catch (IOException e) {
+            errorJob(job, e.getLocalizedMessage());
         }
-        job.getNode().complete(job);
-        addJobToRenderQueue(job);
     }
 
-    public void completeRender(Job job) {
-        if(!getJobFile(job, "pdf").exists()){
-            String message = MessageFormat.format("Tried to complete the render of job {0} without PDF.", job.getId());
-            errorJob(job, message);
-            throw new RuntimeException(message);
+    public void completeRender(Job job, byte[] pdf) {
+        try {
+            saveFile(job, pdf, "pdf");
+            job.getNode().complete(job);
+            job.setState(Job.State.DONE);
+        } catch (IOException e) {
+            errorJob(job, e.getLocalizedMessage());
         }
-        job.getNode().complete(job);
-        job.setState(Job.State.DONE);
     }
 
     public void errorTransform(Job job, String error) {
@@ -106,7 +111,7 @@ public class JobManager {
     }
 
     public void addJobToRenderQueue(Job job) {
-        if(!getJobFile(job, "xslfo").exists()){
+        if (!getJobFile(job, "xslfo").exists()) {
             String message = MessageFormat.format("Tried to add job {0} to the render queue without XSL-FO.", job.getId());
             errorJob(job, message);
             throw new RuntimeException(message);
@@ -119,7 +124,7 @@ public class JobManager {
     }
 
     public void addJobToTransformQueue(Job job) {
-        if(!getJobFile(job, "xml").exists() || !getJobFile(job, "xsl").exists()){
+        if (!getJobFile(job, "xml").exists() || !getJobFile(job, "xsl").exists()) {
             String message = MessageFormat.format("Tried to add job {0} to the transform queue without XML or XSL.", job.getId());
             errorJob(job, message);
             throw new RuntimeException(message);
@@ -142,17 +147,6 @@ public class JobManager {
         }
     }
 
-    public void completeJob(Node.Type type, Job job) throws UnknownTypeException {
-        switch (type) {
-            case TRANSFORM:
-                completeTransform(job);
-            case RENDER:
-                completeRender(job);
-            default:
-                throw new UnknownTypeException(MessageFormat.format("Unknown type ''{0}''.", type));
-        }
-    }
-
     public void errorJob(Node.Type type, Job job, String error) {
         switch (type) {
             case TRANSFORM:
@@ -162,7 +156,12 @@ public class JobManager {
             default:
                 job.setState(Job.State.ERROR);
         }
-        job.setError(error);
+        try {
+            saveFile(job, error.getBytes(), "error");
+        } catch (IOException e) {
+            LOG.fatal("Failed to save error message.", e);
+            throw new RuntimeException(e);
+        }
     }
 
     public void errorJob(Job job, String error) {

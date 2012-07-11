@@ -5,6 +5,8 @@
 package uk.co.techsols.eiocha.entities;
 
 import java.util.HashMap;
+import uk.co.techsols.eiocha.Manager;
+import uk.co.techsols.eiocha.UnknownTypeException;
 import uk.co.techsols.eiocha.node.NodeManager;
 import uk.co.techsols.eiocha.workers.Transformer;
 
@@ -21,20 +23,22 @@ public class Node {
     private final long id;
     private final Type type;
     private final int totalCapacity;
+    private final NodeManager nodeManager;
     private int usedCapacity;
     private HashMap<Long, Job> jobs = new HashMap<Long, Job>();
-    private NodeManager nodeManager;
+    private Manager manager;
 
-    public Node(NodeManager nodeManager, long id, int totalCapacity) {
-        this.nodeManager = nodeManager;
+    public Node(Manager manager, long id, int totalCapacity) throws UnknownTypeException {
+        this.manager = manager;
         this.id = id;
-        this.type = nodeManager.getType();
+        this.type = Node.Type.TRANSFORM;
         this.totalCapacity = totalCapacity;
         this.usedCapacity = 0;
+        this.nodeManager = manager.getNodeManager(type);
     }
 
-    public void setNodeManager(NodeManager nodeManager) {
-        this.nodeManager = nodeManager;
+    public void setNodeManager(Manager manager) {
+        this.manager = manager;
     }
 
     public boolean hasFreeCapacity() {
@@ -71,12 +75,15 @@ public class Node {
 
     public void process(Job job) {
         jobs.put(job.getId(), job);
+        job.setNode(this);
         usedCapacity++;
         if (hasFreeCapacity()) {
             nodeManager.queueNode(this);
         }
 
-        Transformer transformer = new Transformer();
+        
+        // TODO: Send it to a remote worker
+        Transformer transformer = new Transformer(manager);
         transformer.process(job);
 
     }

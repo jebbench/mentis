@@ -16,4 +16,5 @@
         <property name="jobDataDirectory" value="/eiocha/job-data"/>
     </bean>
     <bean class="uk.co.techsols.eiocha.node.TransformNodeManager" />
+    <bean class="uk.co.techsols.eiocha.node.RenderNodeManager" />
 </beans>

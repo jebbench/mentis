@@ -22,7 +22,6 @@ public class Job {
     private File dataDirectory;
     private Long id;
     private State state = State.NEW;
-    private String error = null;
     private Node node;
 
     public void setDataDirectory(File dataDirectory) {
@@ -62,14 +61,6 @@ public class Job {
 
     public void setNode(Node node) {
         this.node = node;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
     }
     
     
