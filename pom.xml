@@ -14,15 +14,13 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>3.1.1.RELEASE</spring.version>
-        <hibernate.version>4.1.4.Final</hibernate.version>
+        <activeMQ.version>5.6.0</activeMQ.version>
+<!--        <hibernate.version>4.1.4.Final</hibernate.version>-->
+        
     </properties>
 
     <repositories>
-        <repository>
-            <id>jbos-public-repository</id>
-            <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
-            <layout>default</layout>
-        </repository>
+
     </repositories>
 
     <dependencies>
@@ -66,6 +64,11 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
         
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
@@ -73,11 +76,11 @@
             <version>1.0</version>
         </dependency>
         
-        <dependency>
+        <!--<dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -94,10 +97,26 @@
             <version>9.4</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.xbean</groupId>
+            <artifactId>xbean-spring</artifactId>
+            <version>3.11.1</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>6.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-core</artifactId>
+            <version>${activeMQ.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-spring</artifactId>
+            <version>${activeMQ.version}</version>
         </dependency>
     </dependencies>
 

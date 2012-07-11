@@ -15,7 +15,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class Job {
     
-    public enum State {NEW, TQUEUE, TING, TERROR, RQUEUE, RING, RERROR, DONE, ERROR};
+    public enum State {NEW, TQUEUE, TING, TERROR, TDONE, RQUEUE, RING, RERROR, RDONE, DONE, ERROR};
     
     private final static Log LOG = LogFactory.getLog(Job.class);
     

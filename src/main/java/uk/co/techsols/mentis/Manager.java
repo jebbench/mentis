@@ -5,12 +5,13 @@
 package uk.co.techsols.mentis;
 
 import java.text.MessageFormat;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import uk.co.techsols.mentis.entities.Node;
 import uk.co.techsols.mentis.job.JobManager;
 import uk.co.techsols.mentis.node.NodeManager;
-import uk.co.techsols.mentis.node.RenderNodeManager;
-import uk.co.techsols.mentis.node.TransformNodeManager;
 
 /**
  *
@@ -18,36 +19,64 @@ import uk.co.techsols.mentis.node.TransformNodeManager;
  */
 public class Manager {
 
-    @Autowired
-    TransformNodeManager transformNodeManager;
-    @Autowired
-    RenderNodeManager renderNodeManager;
-    @Autowired
-    JobManager jobManager;
+    private final NodeManager transformNodeManager;
+    private final NodeManager renderNodeManager;
+    private final JobManager jobManager; 
+    
+    private final static Log LOG = LogFactory.getLog(Manager.class);
+    
+    private Thread renderNodesThread;
+    private Thread transformNodesThread;
 
-    public Manager() {
+    public Manager(NodeManager transformNodeManager, NodeManager renderNodeManager, JobManager jobManager) {
+        this.transformNodeManager = transformNodeManager;
+        this.renderNodeManager = renderNodeManager;
+        this.jobManager = jobManager;
+    }
+    
+    @PostConstruct
+    public void start(){
+        transformNodesThread = new Thread(transformNodeManager);
+        renderNodesThread = new Thread(renderNodeManager);
+        
+        transformNodesThread.start();
+        renderNodesThread.start();
+        
+        if(LOG.isDebugEnabled()){
+            LOG.debug("Started threads for transform and render node managers.");
+        }
+    }
+    
+    @PreDestroy
+    public void stop(){
+        transformNodesThread.interrupt();
+        renderNodesThread.interrupt();
+        
+        if(LOG.isDebugEnabled()){
+            LOG.debug("Sent interrupts to transform and render node managers.");
+        }
     }
 
     public JobManager getJobManager() {
         return jobManager;
     }
 
-    public TransformNodeManager getTransformNodeManager() {
+    public NodeManager getTransformNodeManager() {
         return transformNodeManager;
     }
 
-    public RenderNodeManager getRenderNodeManager() {
+    public NodeManager getRenderNodeManager() {
         return renderNodeManager;
     }
 
-    public NodeManager getNodeManager(Node.Type type) throws UnknownTypeException {
+    public NodeManager getNodeManager(Node.Type type) {
         switch (type) {
             case TRANSFORM:
                 return getTransformNodeManager();
             case RENDER:
                 return getRenderNodeManager();
             default:
-                throw new UnknownTypeException(MessageFormat.format("Unknown type ''{0}''.", type));
+                throw new RuntimeException(MessageFormat.format("Unknown type ''{0}''.", type));
         }
     }
 }

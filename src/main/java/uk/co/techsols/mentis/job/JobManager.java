@@ -24,17 +24,14 @@ import uk.co.techsols.mentis.entities.Node;
 public class JobManager {
 
     private final static Log LOG = LogFactory.getLog(JobManager.class);
-    private final Manager manager;
     private final HashMap<Long, Job> jobs = new HashMap<Long, Job>();
     private final PriorityBlockingQueue<Job> transformQueue = new PriorityBlockingQueue<Job>();
     private final PriorityBlockingQueue<Job> renderQueue = new PriorityBlockingQueue<Job>();
-    private File jobDataDirectory;
+    
     private long count = 0;
-
-    @Autowired
-    public JobManager(Manager manager) {
-        this.manager = manager;
-    }
+    
+    // Set by context
+    private File jobDataDirectory;
 
     public void setJobDataDirectory(File jobDataDirectory) {
         this.jobDataDirectory = jobDataDirectory;
