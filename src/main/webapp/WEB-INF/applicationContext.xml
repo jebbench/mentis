@@ -13,44 +13,6 @@
     
     <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
     
-    <!-- ***** JMS ***** -->
-    
-    <!--  ActiveMQ Broker -->
-    <amq:broker useJmx="false" persistent="false">
-        <amq:transportConnectors>
-            <amq:transportConnector uri="tcp://localhost:0" />
-        </amq:transportConnectors>
-    </amq:broker>
-    
-    <!-- a pooling based JMS provider -->
-    <bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
-        <property name="connectionFactory">
-            <bean class="org.apache.activemq.ActiveMQConnectionFactory">
-                <property name="brokerURL">
-                    <value>tcp://localhost:61616</value>
-                </property>
-            </bean>
-        </property>
-    </bean>
-  
-
-    <!-- Spring JMS Template -->
-    <bean id="myJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
-        <property name="connectionFactory">
-            <ref local="jmsFactory"/>
-        </property>
-    </bean>
-    
-
-
-    <!-- a sample POJO consumer -->
-<!--    <bean id="consumer" class="org.apache.activemq.spring.SpringConsumer">
-        <property name="template" ref="consumerJmsTemplate"/>
-        <property name="destination" ref="destination"/>
-    </bean>-->
-
-    <!-- ***** END JMS ***** -->
-    
     <bean id="jobManager" class="uk.co.techsols.mentis.job.JobManager" >
         <property name="jobDataDirectory" value="/mentis/job-data"/>
     </bean>

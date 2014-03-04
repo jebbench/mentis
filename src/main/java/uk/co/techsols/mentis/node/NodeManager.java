@@ -5,6 +5,7 @@
 package uk.co.techsols.mentis.node;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 import org.apache.commons.logging.Log;
@@ -56,6 +57,10 @@ public class NodeManager implements Runnable {
 
     public Node getNode(Long id) {
         return nodes.get(id);
+    }
+    
+    public Collection<Node> getNodes(){
+        return nodes.values();
     }
 
     public void queueNode(Node node) {

@@ -6,16 +6,9 @@ package uk.co.techsols.mentis.entities;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
-import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
 import uk.co.techsols.mentis.Manager;
 import uk.co.techsols.mentis.node.JobStateMap;
 
@@ -23,20 +16,17 @@ import uk.co.techsols.mentis.node.JobStateMap;
  *
  * @author James Bench
  */
-public class Node {
+public class Node implements Comparable<Node> {
 
     public enum Type {
-
         RENDER, TRANSFORM
     };
+    
     public static final String MESSAGE_JOBID = "JobId";
     private final static Log LOG = LogFactory.getLog(Node.class);
     private final long id;
     private final Type type;
     private final int totalCapacity;
-    @Autowired
-    private JmsTemplate jmsTemplate;
-    private final Destination destination;
     private final JobStateMap jobStateMap;
     private int usedCapacity;
     private HashMap<Long, Job> jobs = new HashMap<Long, Job>();
@@ -49,7 +39,6 @@ public class Node {
         this.type = type;
         this.totalCapacity = totalCapacity;
         this.usedCapacity = 0;
-        this.destination = new ActiveMQQueue(new StringBuilder(type.toString()).append('_').append(this.id).toString());
         switch (this.type) {
             case RENDER:
                 this.jobStateMap = new JobStateMap(Job.State.RQUEUE, Job.State.RING, Job.State.RERROR, Job.State.RDONE);
@@ -62,6 +51,11 @@ public class Node {
         }
 
         LOG.info(MessageFormat.format("Created {0} node {1} with capacity {2}.", type, id, totalCapacity));
+    }
+
+    @Override
+    public int compareTo(Node o) {
+        return this.getFreeCapacity() > o.getFreeCapacity() ? 1 : this.getFreeCapacity() < o.getFreeCapacity() ? -1 : 0;
     }
 
     public boolean hasFreeCapacity() {
@@ -142,20 +136,10 @@ public class Node {
         increaseUsedCapacity();
         job.setState(jobStateMap.getIng());
 
-        final long jobId = job.getId();
-
-        jmsTemplate.send(destination, new MessageCreator() {
-
-            @Override
-            public Message createMessage(Session sn) throws JMSException {
-                Message message = sn.createMessage();
-                message.setLongProperty(MESSAGE_JOBID, jobId);
-                return message;
-            }
-        });
+        // TODO - send job to node
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug(MessageFormat.format("Send message to {0} node {1} to process job {2}.", type, id, jobId));
+            LOG.debug(MessageFormat.format("Send message to {0} node {1} to process job {2}.", type, id, job.getId()));
         }
     }
 }

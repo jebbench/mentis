@@ -14,8 +14,7 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>3.1.1.RELEASE</spring.version>
-        <activeMQ.version>5.6.0</activeMQ.version>
-<!--        <hibernate.version>4.1.4.Final</hibernate.version>-->
+        <jackson.version>1.9.12</jackson.version>
         
     </properties>
 
@@ -69,6 +68,12 @@
             <artifactId>spring-jms</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <!-- Jackson JSON Mapper -->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
         
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
@@ -76,11 +81,6 @@
             <version>1.0</version>
         </dependency>
         
-        <!--<dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>-->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -106,17 +106,6 @@
             <artifactId>javaee-web-api</artifactId>
             <version>6.0</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-core</artifactId>
-            <version>${activeMQ.version}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-spring</artifactId>
-            <version>${activeMQ.version}</version>
         </dependency>
     </dependencies>
 

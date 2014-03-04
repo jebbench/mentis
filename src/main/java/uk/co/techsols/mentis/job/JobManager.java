@@ -54,7 +54,7 @@ public class JobManager {
         try {
             IOUtils.write(content, new FileOutputStream(file));
         } catch (IOException e) {
-            LOG.error(MessageFormat.format("Encountered and errow while trying to save file ''{0}''.", file.getAbsolutePath()), e);
+            LOG.error(MessageFormat.format("Encountered and error while trying to save file ''{0}''.", file.getAbsolutePath()), e);
             throw e;
         }
     }
