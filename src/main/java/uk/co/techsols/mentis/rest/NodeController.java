@@ -9,6 +9,7 @@ import java.util.Collection;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,8 +33,16 @@ public class NodeController {
     }
     
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> addNode(){
-        Node node = transformNodeManager.createNode(2);
+    public ResponseEntity<String> addNode(@RequestBody NodeTemplate nodeTemplate){
+        NodeManager manager;
+        switch(nodeTemplate.type){
+            case TRANSFORM:
+                manager = transformNodeManager;
+                break;
+            default:
+                manager = renderNodeManager;
+        }
+        Node node = manager.createNode(nodeTemplate.totalCapacity);
         return new ResponseEntity<String>(node.getId().toString(), HttpStatus.CREATED);
     }
     
