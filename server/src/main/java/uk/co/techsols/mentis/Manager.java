@@ -7,8 +7,8 @@ package uk.co.techsols.mentis;
 import java.text.MessageFormat;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.co.techsols.mentis.common.NodeType;
 import uk.co.techsols.mentis.entities.Node;
 import uk.co.techsols.mentis.job.JobManager;
@@ -24,7 +24,7 @@ public class Manager {
     private final NodeManager renderNodeManager;
     private final JobManager jobManager; 
     
-    private final static Log LOG = LogFactory.getLog(Manager.class);
+    private final static Logger LOG = LoggerFactory.getLogger(Manager.class);
     
     private Thread renderNodesThread;
     private Thread transformNodesThread;

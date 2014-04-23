@@ -8,8 +8,8 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.PriorityBlockingQueue;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.co.techsols.mentis.UnknownTypeException;
 import uk.co.techsols.mentis.common.NodeType;
@@ -23,7 +23,7 @@ import uk.co.techsols.mentis.job.JobManager;
  */
 public class NodeManager implements Runnable {
 
-    private final static Log LOG = LogFactory.getLog(NodeManager.class);
+    private final static Logger LOG = LoggerFactory.getLogger(NodeManager.class);
     
     private final NodeType type;
     
@@ -93,7 +93,7 @@ public class NodeManager implements Runnable {
                     }
                     node.process(job);
                 } catch (InterruptedException e) {
-                    LOG.error(e);
+                    LOG.error(e.getLocalizedMessage(), e);
                     if (node != null) {
                         queueNode(node);
                     }
@@ -102,7 +102,7 @@ public class NodeManager implements Runnable {
                     }
                 }
             } catch (UnknownTypeException e) {
-                LOG.error(e);
+                LOG.error(e.getLocalizedMessage(), e);
             }
         }
     }

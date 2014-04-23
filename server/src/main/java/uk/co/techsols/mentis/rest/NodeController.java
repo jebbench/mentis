@@ -8,9 +8,8 @@ import java.text.MessageFormat;
 import uk.co.techsols.mentis.common.NodeTemplate;
 import java.util.ArrayList;
 import java.util.Collection;
-import javax.ws.rs.PathParam;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,7 +29,7 @@ import uk.co.techsols.mentis.node.NodeManager;
 @RequestMapping("/node")
 public class NodeController {
     
-    private static final Log LOG = LogFactory.getLog(NodeController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NodeController.class);
     
     private final NodeManager transformNodeManager;
     private final NodeManager renderNodeManager;
@@ -42,6 +41,10 @@ public class NodeController {
     
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<String> addNode(@RequestBody NodeTemplate nodeTemplate){
+        if(LOG.isDebugEnabled()){
+            LOG.debug("REST request to create new node.");
+        }
+        
         NodeManager manager;
         switch(nodeTemplate.type){
             case TRANSFORM:
@@ -69,7 +72,7 @@ public class NodeController {
         }
         Node n;
         n = transformNodeManager.getNode(id);
-        if(null != n){
+        if(null == n){
             n = renderNodeManager.getNode(id);
         }
         

@@ -10,8 +10,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,7 @@ import uk.co.techsols.mentis.entities.Job;
 @RequestMapping("/job")
 public class JobController {
 
-    private final static Log LOG = LogFactory.getLog(JobController.class);
+    private final static Logger LOG = LoggerFactory.getLogger(JobController.class);
     JobManager jobManager;
     DocumentBuilder documentBuilder;
 
@@ -62,7 +62,7 @@ public class JobController {
             Job job = jobManager.createJob(xml, xsl);
             return new ResponseEntity<String>(job.getId().toString(), HttpStatus.CREATED);
         } catch (Exception e) {
-            LOG.error(e);
+            LOG.error(e.getLocalizedMessage(), e);
             return new ResponseEntity<String>(e.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

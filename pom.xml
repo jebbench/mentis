@@ -15,6 +15,7 @@
         <spring.version>3.1.1.RELEASE</spring.version>
         <jackson.version>1.9.12</jackson.version>
         <activeMQ.version>5.9.0</activeMQ.version>
+        <slf4j.version>1.7.7</slf4j.version>
     </properties>
   
     <modules>

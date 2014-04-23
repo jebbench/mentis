@@ -6,8 +6,8 @@ package uk.co.techsols.mentis.entities;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.co.techsols.mentis.Manager;
 import uk.co.techsols.mentis.common.NodeType;
@@ -20,7 +20,7 @@ import uk.co.techsols.mentis.node.JobStateMap;
 public class Node implements Comparable<Node> {
     
     public static final String MESSAGE_JOBID = "JobId";
-    private final static Log LOG = LogFactory.getLog(Node.class);
+    private final static Logger LOG = LoggerFactory.getLogger(Node.class);
     private final long id;
     private final NodeType type;
     private final int totalCapacity;

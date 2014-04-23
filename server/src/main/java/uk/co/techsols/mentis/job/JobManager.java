@@ -9,8 +9,8 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.co.techsols.mentis.UnknownTypeException;
 import uk.co.techsols.mentis.common.NodeType;
 import uk.co.techsols.mentis.entities.Job;
@@ -22,7 +22,7 @@ import uk.co.techsols.mentis.entities.Node;
  */
 public class JobManager {
 
-    private final static Log LOG = LogFactory.getLog(JobManager.class);
+    private final static Logger LOG = LoggerFactory.getLogger(JobManager.class);
     private final HashMap<Long, Job> jobs = new HashMap<Long, Job>();
     private final PriorityBlockingQueue<Job> transformQueue = new PriorityBlockingQueue<Job>();
     private final PriorityBlockingQueue<Job> renderQueue = new PriorityBlockingQueue<Job>();
@@ -38,7 +38,7 @@ public class JobManager {
             LOG.info(MessageFormat.format("Creating directory ''{0}''.", this.jobDataDirectory.getAbsolutePath()));
             if (!this.jobDataDirectory.mkdirs()) {
                 RuntimeException e = new RuntimeException(MessageFormat.format("Failed to create directory ''{0}''; check path and permissions.", this.jobDataDirectory.getAbsolutePath()));
-                LOG.fatal(e);
+                LOG.error(e.getLocalizedMessage(), e);
                 throw e;
             }
         }
@@ -155,7 +155,7 @@ public class JobManager {
         try {
             saveFile(job, error.getBytes(), "error");
         } catch (IOException e) {
-            LOG.fatal("Failed to save error message.", e);
+            LOG.error("Failed to save error message.", e);
             throw new RuntimeException(e);
         }
     }

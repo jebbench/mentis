@@ -6,8 +6,8 @@ package uk.co.techsols.mentis.entities;
 
 import java.io.File;
 import java.text.MessageFormat;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -17,7 +17,7 @@ public class Job {
     
     public enum State {NEW, TQUEUE, TING, TERROR, TDONE, RQUEUE, RING, RERROR, RDONE, DONE, ERROR};
     
-    private final static Log LOG = LogFactory.getLog(Job.class);
+    private final static Logger LOG = LoggerFactory.getLogger(Job.class);
     
     private File dataDirectory;
     private Long id;

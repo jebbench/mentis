@@ -13,8 +13,8 @@
 //import javax.xml.transform.TransformerFactory;
 //import javax.xml.transform.stream.StreamResult;
 //import javax.xml.transform.stream.StreamSource;
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 //
 ///**
 // *
@@ -22,7 +22,7 @@
 // */
 //public class Transformer  {
 //
-//    private final static Log LOG = LogFactory.getLog(Transformer.class);
+//    private final static Logger LOG = LoggerFactory.getLogger(Transformer.class);
 //    private final TransformerFactory transformerFactory = new net.sf.saxon.TransformerFactoryImpl();
 //
 //    
