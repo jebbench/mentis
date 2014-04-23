@@ -4,11 +4,17 @@
  */
 package uk.co.techsols.mentis.rest;
 
+import java.text.MessageFormat;
+import uk.co.techsols.mentis.common.NodeTemplate;
 import java.util.ArrayList;
 import java.util.Collection;
+import javax.ws.rs.PathParam;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +29,8 @@ import uk.co.techsols.mentis.node.NodeManager;
 @Controller
 @RequestMapping("/node")
 public class NodeController {
+    
+    private static final Log LOG = LogFactory.getLog(NodeController.class);
     
     private final NodeManager transformNodeManager;
     private final NodeManager renderNodeManager;
@@ -52,6 +60,26 @@ public class NodeController {
         c.addAll(transformNodeManager.getNodes());
         c.addAll(renderNodeManager.getNodes());
         return c;
+    }
+    
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public @ResponseBody Node viewNode(@PathVariable long id){
+        if(LOG.isDebugEnabled()){
+            LOG.debug(MessageFormat.format("REST request for node {}.", id));
+        }
+        Node n;
+        n = transformNodeManager.getNode(id);
+        if(null != n){
+            n = renderNodeManager.getNode(id);
+        }
+        
+        if(LOG.isDebugEnabled()){
+            if(null == n){
+                LOG.debug(MessageFormat.format("REST request for node {} was not found.", id));
+            }
+        }
+        
+        return n;
     }
     
 }

@@ -12,9 +12,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.co.techsols.mentis.UnknownTypeException;
+import uk.co.techsols.mentis.common.NodeType;
 import uk.co.techsols.mentis.entities.Job;
 import uk.co.techsols.mentis.entities.Node;
-import uk.co.techsols.mentis.entities.Node.Type;
 import uk.co.techsols.mentis.job.JobManager;
 
 /**
@@ -25,7 +25,7 @@ public class NodeManager implements Runnable {
 
     private final static Log LOG = LogFactory.getLog(NodeManager.class);
     
-    private final Type type;
+    private final NodeType type;
     
     private HashMap<Long, Node> nodes = new HashMap<Long, Node>();
     private PriorityBlockingQueue<Node> availableNodes = new PriorityBlockingQueue<Node>();
@@ -35,7 +35,7 @@ public class NodeManager implements Runnable {
     @Autowired
     private JobManager jobManager;
 
-    public NodeManager(Type type) {
+    public NodeManager(NodeType type) {
         this.type = type;
     }
 
@@ -51,7 +51,7 @@ public class NodeManager implements Runnable {
         return node;
     }
 
-    public Type getType(){
+    public NodeType getType(){
         return type;
     }
 

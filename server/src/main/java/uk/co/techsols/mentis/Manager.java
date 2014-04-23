@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import uk.co.techsols.mentis.common.NodeType;
 import uk.co.techsols.mentis.entities.Node;
 import uk.co.techsols.mentis.job.JobManager;
 import uk.co.techsols.mentis.node.NodeManager;
@@ -69,7 +70,7 @@ public class Manager {
         return renderNodeManager;
     }
 
-    public NodeManager getNodeManager(Node.Type type) {
+    public NodeManager getNodeManager(NodeType type) {
         switch (type) {
             case TRANSFORM:
                 return getTransformNodeManager();

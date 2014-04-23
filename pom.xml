@@ -14,6 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>3.1.1.RELEASE</spring.version>
         <jackson.version>1.9.12</jackson.version>
+        <activeMQ.version>5.9.0</activeMQ.version>
     </properties>
   
     <modules>

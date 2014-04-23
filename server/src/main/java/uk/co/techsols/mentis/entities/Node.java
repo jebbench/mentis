@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.co.techsols.mentis.Manager;
+import uk.co.techsols.mentis.common.NodeType;
 import uk.co.techsols.mentis.node.JobStateMap;
 
 /**
@@ -17,15 +18,11 @@ import uk.co.techsols.mentis.node.JobStateMap;
  * @author James Bench
  */
 public class Node implements Comparable<Node> {
-
-    public enum Type {
-        RENDER, TRANSFORM
-    };
     
     public static final String MESSAGE_JOBID = "JobId";
     private final static Log LOG = LogFactory.getLog(Node.class);
     private final long id;
-    private final Type type;
+    private final NodeType type;
     private final int totalCapacity;
     private final JobStateMap jobStateMap;
     private int usedCapacity;
@@ -34,7 +31,7 @@ public class Node implements Comparable<Node> {
     @Autowired
     private Manager manager;
 
-    public Node(Type type, long id, int totalCapacity) {
+    public Node(NodeType type, long id, int totalCapacity) {
         this.id = id;
         this.type = type;
         this.totalCapacity = totalCapacity;
@@ -82,7 +79,7 @@ public class Node implements Comparable<Node> {
         return id;
     }
 
-    public Type getType() {
+    public NodeType getType() {
         return type;
     }
 

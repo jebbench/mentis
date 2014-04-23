@@ -12,6 +12,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import uk.co.techsols.mentis.UnknownTypeException;
+import uk.co.techsols.mentis.common.NodeType;
 import uk.co.techsols.mentis.entities.Job;
 import uk.co.techsols.mentis.entities.Node;
 
@@ -98,11 +99,11 @@ public class JobManager {
     }
 
     public void errorTransform(Job job, String error) {
-        errorJob(Node.Type.TRANSFORM, job, error);
+        errorJob(NodeType.TRANSFORM, job, error);
     }
 
     public void errorRender(Job job, String error) {
-        errorJob(Node.Type.RENDER, job, error);
+        errorJob(NodeType.RENDER, job, error);
     }
 
     public void addJobToRenderQueue(Job job) {
@@ -131,7 +132,7 @@ public class JobManager {
         }
     }
 
-    public void queueJob(Node.Type type, Job job) throws UnknownTypeException {
+    public void queueJob(NodeType type, Job job) throws UnknownTypeException {
         switch (type) {
             case TRANSFORM:
                 addJobToTransformQueue(job);
@@ -142,7 +143,7 @@ public class JobManager {
         }
     }
 
-    public void errorJob(Node.Type type, Job job, String error) {
+    public void errorJob(NodeType type, Job job, String error) {
         switch (type) {
             case TRANSFORM:
                 job.setState(Job.State.TERROR);
@@ -163,7 +164,7 @@ public class JobManager {
         errorJob(null, job, error);
     }
 
-    public Job getNextJob(Node.Type type) throws InterruptedException, UnknownTypeException {
+    public Job getNextJob(NodeType type) throws InterruptedException, UnknownTypeException {
         try {
             switch (type) {
                 case TRANSFORM:

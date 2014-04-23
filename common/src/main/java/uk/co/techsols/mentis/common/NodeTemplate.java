@@ -4,15 +4,13 @@
  * and open the template in the editor.
  */
 
-package uk.co.techsols.mentis.rest;
-
-import uk.co.techsols.mentis.entities.Node;
+package uk.co.techsols.mentis.common;
 
 /**
  *
  * @author James Bench
  */
 public class NodeTemplate {
-    public Node.Type type;
+    public NodeType type;
     public int totalCapacity;
 }
