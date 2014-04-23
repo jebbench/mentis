@@ -66,22 +66,15 @@ public class NodeController {
     }
     
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public @ResponseBody Node viewNode(@PathVariable long id){
-        if(LOG.isDebugEnabled()){
-            LOG.debug(MessageFormat.format("REST request for node {}.", id));
-        }
+    public @ResponseBody Node viewNode(@PathVariable long id) throws ResourceNotFoundException {
         Node n;
         n = transformNodeManager.getNode(id);
         if(null == n){
             n = renderNodeManager.getNode(id);
         }
-        
-        if(LOG.isDebugEnabled()){
-            if(null == n){
-                LOG.debug(MessageFormat.format("REST request for node {} was not found.", id));
-            }
+        if(null == n){
+            throw new ResourceNotFoundException(MessageFormat.format("Could not find a node with id {1}", id));
         }
-        
         return n;
     }
     
