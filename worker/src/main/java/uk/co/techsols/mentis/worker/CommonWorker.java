@@ -20,7 +20,9 @@ public abstract class CommonWorker {
     protected NodeType type;
     protected RestTemplate restTemplate;
     
-    protected URI url;
+    protected URI baseUri;
+    protected URI nodeUri;
+    protected long id;
     protected int cores;
 
     public void setRestTemplate(RestTemplate restTemplate) {
@@ -28,7 +30,7 @@ public abstract class CommonWorker {
     }
     
     public void setup(URI url, int cores) {
-        this.url = url;
+        this.baseUri = url;
         this.cores = cores;
         register(); // Move this to a loop for reconnecting?
     }
@@ -38,9 +40,12 @@ public abstract class CommonWorker {
         nodeTemplate.totalCapacity = cores;
         nodeTemplate.type = type;
         
-        URI uri = url.resolve("rest/node");
+        URI uri = baseUri.resolve("rest/node");
         
-        restTemplate.postForLocation(uri, nodeTemplate);
+        nodeUri = restTemplate.postForLocation(uri, nodeTemplate);
+        nodeTemplate = restTemplate.getForObject(nodeUri, NodeTemplate.class);
+        
+        id = nodeTemplate.id;
     }
     
 }

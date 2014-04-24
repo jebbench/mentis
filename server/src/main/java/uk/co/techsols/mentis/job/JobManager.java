@@ -12,9 +12,9 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.techsols.mentis.UnknownTypeException;
+import uk.co.techsols.mentis.common.JobState;
 import uk.co.techsols.mentis.common.NodeType;
 import uk.co.techsols.mentis.entities.Job;
-import uk.co.techsols.mentis.entities.Node;
 
 /**
  *
@@ -92,7 +92,7 @@ public class JobManager {
         try {
             saveFile(job, pdf, "pdf");
             job.getNode().complete(job);
-            job.setState(Job.State.DONE);
+            job.setState(JobState.DONE);
         } catch (IOException e) {
             errorJob(job, e.getLocalizedMessage());
         }
@@ -112,7 +112,7 @@ public class JobManager {
             errorJob(job, message);
             throw new RuntimeException(message);
         }
-        job.setState(Job.State.RQUEUE);
+        job.setState(JobState.RQUEUE);
         renderQueue.add(job);
         if (LOG.isDebugEnabled()) {
             LOG.debug(MessageFormat.format("Added job {0} to the RENDER queue.", job.getId()));
@@ -125,7 +125,7 @@ public class JobManager {
             errorJob(job, message);
             throw new RuntimeException(message);
         }
-        job.setState(Job.State.TQUEUE);
+        job.setState(JobState.TQUEUE);
         transformQueue.add(job);
         if (LOG.isDebugEnabled()) {
             LOG.debug(MessageFormat.format("Added job {0} to the TRANSFORM queue.", job.getId()));
@@ -146,11 +146,11 @@ public class JobManager {
     public void errorJob(NodeType type, Job job, String error) {
         switch (type) {
             case TRANSFORM:
-                job.setState(Job.State.TERROR);
+                job.setState(JobState.TERROR);
             case RENDER:
-                job.setState(Job.State.RERROR);
+                job.setState(JobState.RERROR);
             default:
-                job.setState(Job.State.ERROR);
+                job.setState(JobState.ERROR);
         }
         try {
             saveFile(job, error.getBytes(), "error");

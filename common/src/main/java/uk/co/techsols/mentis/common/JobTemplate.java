@@ -6,16 +6,11 @@
 
 package uk.co.techsols.mentis.common;
 
-import java.util.ArrayList;
-
 /**
  *
- * @author James Bench
+ * @author james.bench
  */
-public class NodeTemplate {
-    public NodeType type;
-    public int totalCapacity;
-    public int usedCapacity;
+public class JobTemplate {
     public long id;
-    public ArrayList<JobTemplate> jobs;
+    public JobState state;
 }

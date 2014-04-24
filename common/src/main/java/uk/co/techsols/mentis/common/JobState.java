@@ -6,16 +6,8 @@
 
 package uk.co.techsols.mentis.common;
 
-import java.util.ArrayList;
-
 /**
  *
- * @author James Bench
+ * @author james.bench
  */
-public class NodeTemplate {
-    public NodeType type;
-    public int totalCapacity;
-    public int usedCapacity;
-    public long id;
-    public ArrayList<JobTemplate> jobs;
-}
+public enum JobState {NEW, TQUEUE, TING, TERROR, TDONE, RQUEUE, RING, RERROR, RDONE, DONE, ERROR};

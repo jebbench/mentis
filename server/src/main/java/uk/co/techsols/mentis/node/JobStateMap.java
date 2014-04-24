@@ -4,7 +4,7 @@
  */
 package uk.co.techsols.mentis.node;
 
-import uk.co.techsols.mentis.entities.Job.State;
+import uk.co.techsols.mentis.common.JobState;
 
 /**
  *
@@ -12,31 +12,31 @@ import uk.co.techsols.mentis.entities.Job.State;
  */
 public class JobStateMap {
     
-    State queue;
-    State ing;
-    State error;
-    State done;
+    JobState queue;
+    JobState ing;
+    JobState error;
+    JobState done;
 
-    public JobStateMap(State queue, State ing, State error, State done) {
+    public JobStateMap(JobState queue, JobState ing, JobState error, JobState done) {
         this.queue = queue;
         this.ing = ing;
         this.error = error;
         this.done = done;
     }
 
-    public State getError() {
+    public JobState getError() {
         return error;
     }
 
-    public State getIng() {
+    public JobState getIng() {
         return ing;
     }
 
-    public State getQueue() {
+    public JobState getQueue() {
         return queue;
     }
 
-    public State getDone() {
+    public JobState getDone() {
         return done;
     }
     

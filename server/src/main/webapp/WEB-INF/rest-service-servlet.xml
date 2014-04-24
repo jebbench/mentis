@@ -17,6 +17,11 @@
     <!--<context:component-scan base-package="uk.co.techsols.mentis.rest" />-->
     <mvc:annotation-driven />
     
+    <bean id="jobConverter" class="uk.co.techsols.mentis.rest.converters.JobConverter" />
+    <bean id="nodeConverter" class="uk.co.techsols.mentis.rest.converters.NodeConverter" >
+        <property name="jobConverter" ref="jobConverter" />
+    </bean>
+    
     <bean class="uk.co.techsols.mentis.rest.JobController">
         <constructor-arg ref="jobManager" />
     </bean>
@@ -24,6 +29,7 @@
     <bean class="uk.co.techsols.mentis.rest.NodeController">
         <constructor-arg name="transformNodeManager" ref="transformManager" />
         <constructor-arg name="renderNodeManager" ref="renderManager" />
+        <property name="nodeConverter" ref="nodeConverter" />
     </bean>
     
 </beans>

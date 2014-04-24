@@ -8,6 +8,7 @@ import java.io.File;
 import java.text.MessageFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.co.techsols.mentis.common.JobState;
 
 /**
  *
@@ -15,13 +16,11 @@ import org.slf4j.LoggerFactory;
  */
 public class Job {
     
-    public enum State {NEW, TQUEUE, TING, TERROR, TDONE, RQUEUE, RING, RERROR, RDONE, DONE, ERROR};
-    
     private final static Logger LOG = LoggerFactory.getLogger(Job.class);
     
     private File dataDirectory;
     private Long id;
-    private State state = State.NEW;
+    private JobState state = JobState.NEW;
     private Node node;
 
     public void setDataDirectory(File dataDirectory) {
@@ -47,11 +46,11 @@ public class Job {
         this.id = id;
     }
 
-    public State getState() {
+    public JobState getState() {
         return state;
     }
 
-    public void setState(State state) {
+    public void setState(JobState state) {
         this.state = state;
     }
 

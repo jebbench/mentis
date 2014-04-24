@@ -6,10 +6,12 @@ package uk.co.techsols.mentis.entities;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.co.techsols.mentis.Manager;
+import uk.co.techsols.mentis.common.JobState;
 import uk.co.techsols.mentis.common.NodeType;
 import uk.co.techsols.mentis.node.JobStateMap;
 
@@ -19,7 +21,6 @@ import uk.co.techsols.mentis.node.JobStateMap;
  */
 public class Node implements Comparable<Node> {
     
-    public static final String MESSAGE_JOBID = "JobId";
     private final static Logger LOG = LoggerFactory.getLogger(Node.class);
     private final long id;
     private final NodeType type;
@@ -38,10 +39,10 @@ public class Node implements Comparable<Node> {
         this.usedCapacity = 0;
         switch (this.type) {
             case RENDER:
-                this.jobStateMap = new JobStateMap(Job.State.RQUEUE, Job.State.RING, Job.State.RERROR, Job.State.RDONE);
+                this.jobStateMap = new JobStateMap(JobState.RQUEUE, JobState.RING, JobState.RERROR, JobState.RDONE);
                 break;
             case TRANSFORM:
-                this.jobStateMap = new JobStateMap(Job.State.TQUEUE, Job.State.TING, Job.State.TERROR, Job.State.TDONE);
+                this.jobStateMap = new JobStateMap(JobState.TQUEUE, JobState.TING, JobState.TERROR, JobState.TDONE);
                 break;
             default:
                 throw new RuntimeException(MessageFormat.format("Unknown type ''{0}''.", type));
@@ -117,6 +118,10 @@ public class Node implements Comparable<Node> {
             LOG.debug(MessageFormat.format("{0} node {1} completed job {2}.", type, id, job.getId()));
         }
         removeJob(job);
+    }
+    
+    public Map<Long, Job> getJobs(){
+        return jobs;
     }
     
     public void error(Job job) {

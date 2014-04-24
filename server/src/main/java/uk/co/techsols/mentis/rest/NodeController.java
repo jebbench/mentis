@@ -5,11 +5,11 @@
 package uk.co.techsols.mentis.rest;
 
 import java.text.MessageFormat;
-import uk.co.techsols.mentis.common.NodeTemplate;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,8 +18,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+import uk.co.techsols.mentis.common.NodeTemplate;
 import uk.co.techsols.mentis.entities.Node;
 import uk.co.techsols.mentis.node.NodeManager;
+import uk.co.techsols.mentis.rest.converters.NodeConverter;
 
 /**
  *
@@ -28,25 +32,31 @@ import uk.co.techsols.mentis.node.NodeManager;
 @Controller
 @RequestMapping("/node")
 public class NodeController {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(NodeController.class);
-    
+
     private final NodeManager transformNodeManager;
     private final NodeManager renderNodeManager;
+    
+    private NodeConverter nodeConverter;
+
+    public void setNodeConverter(NodeConverter nodeConverter) {
+        this.nodeConverter = nodeConverter;
+    }
 
     public NodeController(NodeManager transformNodeManager, NodeManager renderNodeManager) {
         this.transformNodeManager = transformNodeManager;
         this.renderNodeManager = renderNodeManager;
     }
-    
+
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> addNode(@RequestBody NodeTemplate nodeTemplate){
-        if(LOG.isDebugEnabled()){
+    public ResponseEntity<?> addNode(@RequestBody NodeTemplate nodeTemplate, UriComponentsBuilder b) {
+        if (LOG.isDebugEnabled()) {
             LOG.debug("REST request to create new node.");
         }
-        
+
         NodeManager manager;
-        switch(nodeTemplate.type){
+        switch (nodeTemplate.type) {
             case TRANSFORM:
                 manager = transformNodeManager;
                 break;
@@ -54,28 +64,37 @@ public class NodeController {
                 manager = renderNodeManager;
         }
         Node node = manager.createNode(nodeTemplate.totalCapacity);
-        return new ResponseEntity<String>(node.getId().toString(), HttpStatus.CREATED);
+
+        UriComponents uriComponents = b.path("/node/{id}").buildAndExpand(node.getId());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(uriComponents.toUri());
+        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
-    
+
     @RequestMapping(method = RequestMethod.GET)
-    public @ResponseBody Collection<Node> listNodes(){
-        ArrayList<Node> c = new ArrayList<Node>();
-        c.addAll(transformNodeManager.getNodes());
-        c.addAll(renderNodeManager.getNodes());
+    public @ResponseBody
+    Collection<NodeTemplate> listNodes() {
+        ArrayList<NodeTemplate> c = new ArrayList<NodeTemplate>();
+        for(Node n : transformNodeManager.getNodes()){
+            c.add(nodeConverter.convert(n));
+        }
+        for(Node n : renderNodeManager.getNodes()){
+            c.add(nodeConverter.convert(n));
+        }
         return c;
     }
-    
+
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public @ResponseBody Node viewNode(@PathVariable long id) throws ResourceNotFoundException {
-        Node n;
-        n = transformNodeManager.getNode(id);
-        if(null == n){
+    public @ResponseBody
+    NodeTemplate viewNode(@PathVariable long id) throws ResourceNotFoundException {
+        Node n = transformNodeManager.getNode(id);
+        if (null == n) {
             n = renderNodeManager.getNode(id);
         }
-        if(null == n){
+        if (null == n) {
             throw new ResourceNotFoundException(MessageFormat.format("Could not find a node with id {1}", id));
         }
-        return n;
+        return nodeConverter.convert(n);
     }
-    
+
 }
